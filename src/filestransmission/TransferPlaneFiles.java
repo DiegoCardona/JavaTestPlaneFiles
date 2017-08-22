@@ -21,6 +21,11 @@ public class TransferPlaneFiles{
 	
 	private JButton saveButton;
 	private JLabel uploadedFileLabel;
+	private JButton receiverButton;
+	private JButton sendButton;
+	private JTextField stateTextField;
+	private JTextField receiverTextField;
+	
 	public void run() { 
 		Runnable app = new Runnable() {
 	            
@@ -44,22 +49,24 @@ public class TransferPlaneFiles{
 	                saveButton.addActionListener(eventListener);
 	                
 	                JLabel receiverLabel = new JLabel("Destinatario:");
-	                JTextField receiverTextField = new JTextField();
+	                receiverTextField = new JTextField();
 	                JLabel stateLabel = new JLabel("Estado:");
-	                JTextField stateTextField = new JTextField();
-	                stateTextField.setText(this.sent_states[0]);
+	                stateTextField = new JTextField();
+	                stateTextField.setText(this.sent_states[1]);
 	                receiverTextField.setText("Sin Seleccionar");
 	                
 	                receiverTextField.setEnabled(false);
 	                stateTextField.setEnabled(false);
 	                
-	                JButton sendButton = new JButton("Enviar");
+	                sendButton = new JButton("Enviar");
 	                sendButton.setBackground(Color.DARK_GRAY);
 	                sendButton.setForeground(Color.LIGHT_GRAY);
+	                sendButton.addActionListener(eventListener);
 	                
-	                JButton receiverButton = new JButton("Agregar destinatario");
+	                receiverButton = new JButton("Agregar destinatario");
 	                receiverButton.setBackground(Color.DARK_GRAY);
 	                receiverButton.setForeground(Color.LIGHT_GRAY);
+	                receiverButton.addActionListener(eventListener);
 	                
 	                filePanel.add(receiverButton);
 	                filePanel.add(sendButton);
@@ -87,16 +94,18 @@ public class TransferPlaneFiles{
 	
 	private class ButtonsListener implements ActionListener{
 
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == saveButton) {
+		public void actionPerformed(ActionEvent event) {
+			if (event.getSource() == saveButton) {
 				final JFileChooser fc = new JFileChooser();
-				 int returnVal = fc.showOpenDialog(fc);
+				int returnVal = fc.showOpenDialog(fc);
 
-			        if (returnVal == JFileChooser.APPROVE_OPTION) {
-			            File file = fc.getSelectedFile();
-			            uploadedFileLabel.setText(file.getPath());
-			        }
+		        if (returnVal == JFileChooser.APPROVE_OPTION) {
+		            File file = fc.getSelectedFile();
+		            uploadedFileLabel.setText(file.getPath());
+		        }
+			} else if(event.getSource() == receiverButton) {
+				receiverTextField.setEnabled(true);
+				receiverTextField.setText("");
 			}
 			
 		}
