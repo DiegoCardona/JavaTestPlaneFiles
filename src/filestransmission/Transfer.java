@@ -14,7 +14,9 @@ public class Transfer {
 		JPanel buttonsPanel = new JPanel();
 		
 		TransferPlaneFiles transferView = new TransferPlaneFiles();
+		ScheduledTransfer scheduledView = new ScheduledTransfer();
 		transferView.create();
+		scheduledView.create();
 		
 		JButton transferButton = new JButton("Envíar Plano");
 		JButton scheduledButton = new JButton("Programar Envío");
@@ -27,17 +29,24 @@ public class Transfer {
 		    		transferView.setVisible(false);
 		    	} else {
 		    		transferView.setVisible(true);
+		    		scheduledView.setVisible(false);
 		    	}
 		    }
 		});
 		
-		transferButton.addActionListener(new ActionListener() {
+		scheduledButton.addActionListener(new ActionListener() {
 		    public void actionPerformed( ActionEvent aActionEvent ) {
-		      //do something here
+		    	if (scheduledView.isVisible()) {
+		    		scheduledView.setVisible(false);
+		    	} else {
+		    		scheduledView.setVisible(true);
+		    		transferView.setVisible(false);
+		    	}
 		    }
 		});
 		
 		view.add(transferView);
+		view.add(scheduledView);
 		view.add(buttonsPanel);
         view.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         view.setBackground(Color.WHITE);

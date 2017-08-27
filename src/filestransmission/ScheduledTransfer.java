@@ -1,127 +1,153 @@
 package filestransmission;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
 import java.awt.Color;
-import java.awt.Font;
-
-import javax.swing.SwingUtilities;
-
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.io.File;
-import java.awt.FlowLayout;
 
-public class ScheduledTransfer extends JFrame{
+public class ScheduledTransfer extends JPanel implements ActionListener{
 	
+	private JButton saveButton;
 	private JButton openButton;
-	private JLabel uploadedFileLabel;
+	private JButton scheduledButton;
+	private JTextField uploadedFileLabel;
+	private JButton receiverButton;
+	private JButton sendButton;
+	private JTextField stateTextField;
+	private JTextField receiverTextField;
+	private JTextField scheduleTextField;
+	private JLabel receiverLabel;
+	private JLabel stateLabel;
+	private JLabel fileLabel;
+	private JLabel scheduleLabel;
+    private String[] sentStates = {"Sin programar","Pendiente de envï¿½o", "Enviando", "Enviado"};
+
+	public void create() {
+        JPanel filePanel = createFilePanel();
+        JPanel scheduledPanel = createScheduledPanel();
+        
+        configureButtons();
+        configureLabels();
+        configureTextFields();
+        
+        filePanel.add(fileLabel);
+        filePanel.add(uploadedFileLabel);
+        filePanel.add(openButton);
+        filePanel.add(saveButton);
+        
+        filePanel.add(fileLabel);
+        filePanel.add(uploadedFileLabel);
+        filePanel.add(openButton);
+        filePanel.add(saveButton);
+        
+        scheduledPanel.add(scheduledButton);
+        scheduledPanel.add(receiverButton);
+        scheduledPanel.add(receiverLabel);
+        scheduledPanel.add(receiverTextField);
+        scheduledPanel.add(scheduleLabel);
+        scheduledPanel.add(scheduleTextField);
+        scheduledPanel.add(stateLabel);
+        scheduledPanel.add(stateTextField);
+        
+        // General render
+        this.setVisible(false);
+        this.add(filePanel);
+        this.add(scheduledPanel);
+        this.setBackground(Color.WHITE);
+        this.setBounds(50, 50, 500, 300);
+	}
 	
-	public void run() { 
-		
-		Runnable app = new Runnable() {
-	            
-	            private String[] sent_states = {"Sin programar","Pendiente de envío", "Enviando", "Enviado"};
+	private JPanel createFilePanel() {
+		JPanel filePanel = new JPanel(new GridLayout(0,2,80,10));
+        filePanel.setBorder(BorderFactory.createTitledBorder("Subir Plano"));
+        filePanel.setBackground(Color.WHITE);
+        
+        return filePanel;
+	}
+	
+	private JPanel createScheduledPanel() {
+		JPanel filePanel = new JPanel(new GridLayout(0,2,5,10));
+		filePanel.setBorder(BorderFactory.createTitledBorder("Programar envï¿½o"));
+        filePanel.setBackground(Color.WHITE);
+        
+        return filePanel;
+	}
+	
+	private void configureButtons() {
+		saveButton = new JButton("Guardar plano");
+        saveButton.setBackground(Color.DARK_GRAY);
+        saveButton.setForeground(Color.LIGHT_GRAY);
+        saveButton.setFocusable(false);
+        saveButton.addActionListener(this);
+        
+        openButton = new JButton("Buscar plano ...");
+        openButton.setBackground(Color.DARK_GRAY);
+        openButton.setForeground(Color.LIGHT_GRAY);
+        
+        sendButton = new JButton("Guardar Plano");
+        sendButton.setBackground(Color.DARK_GRAY);
+        sendButton.setForeground(Color.LIGHT_GRAY);
+        sendButton.setFocusable(false);
+        sendButton.addActionListener(this);
+        
+        receiverButton = new JButton("Agregar destinatario");
+        receiverButton.setBackground(Color.DARK_GRAY);
+        receiverButton.setForeground(Color.LIGHT_GRAY);
+        receiverButton.setFocusable(false);
+        receiverButton.addActionListener(this);
+        
+        scheduledButton = new JButton("Programar horario");
+        scheduledButton.setBackground(Color.DARK_GRAY);
+        scheduledButton.setForeground(Color.LIGHT_GRAY);
+	}
+	
+	private void configureLabels() {
+		uploadedFileLabel = new JTextField(":/__seleccione_archivo__");
+        uploadedFileLabel.setEnabled(false);
+        receiverLabel = new JLabel("Destinatario:");
+        stateLabel = new JLabel("Estado:");
+        fileLabel = new JLabel("Ruta archivo:");
+        scheduleLabel = new JLabel("Horario");
+	}
+	
+	private void configureTextFields() {
+		receiverTextField = new JTextField();
+        stateTextField = new JTextField();
+        stateTextField.setText(sentStates[1]);
+        receiverTextField.setText("Ingresar IP");
+        receiverTextField.setEnabled(false);
+        stateTextField.setEnabled(false);
+        stateTextField = new JTextField();
+        stateTextField.setText(this.sentStates[0]);
+        scheduleTextField = new JTextField();
+        scheduleTextField.setText("Sin seleccionar");
+        scheduleTextField.setEnabled(false);
+	}
+	
+	public void actionPerformed(ActionEvent event) {
+		if (event.getSource() == openButton) {
+			final JFileChooser fc = new JFileChooser();
+			int returnVal = fc.showOpenDialog(fc);
 
-				public void run() {
-					// upload files section
-	                JPanel filePanel = new JPanel(new GridLayout(0,2,40,10));
-	                filePanel.setBorder(BorderFactory.createTitledBorder("Subir Plano"));
-	                filePanel.setBackground(Color.WHITE);
-	                
-	                openButton = new JButton("Buscar plano ...");
-	                openButton.setBackground(Color.DARK_GRAY);
-	                openButton.setForeground(Color.LIGHT_GRAY);
-	                JButton saveButton = new JButton("Guardar plano");
-	                saveButton.setBackground(Color.DARK_GRAY);
-	                saveButton.setForeground(Color.LIGHT_GRAY);
-	                JLabel fileLabel = new JLabel("Ruta archivo:");
-	                uploadedFileLabel = new JLabel(":/__seleccione_archivo__");
-	            
-	                ButtonsListener buttonListener = new ButtonsListener();
-	        		openButton.addActionListener(buttonListener);
-	                
-	                filePanel.add(fileLabel);
-	                filePanel.add(uploadedFileLabel);
-	                filePanel.add(openButton);
-	                filePanel.add(saveButton);
-	                
-	                // Set schedule section
-	                JPanel scheduledPanel = new JPanel(new GridLayout(0,2,5,10));
-	                scheduledPanel.setBorder(BorderFactory.createTitledBorder("Programar envío"));
-	                scheduledPanel.setBackground(Color.WHITE);
-	                
-	                JLabel receiverLabel = new JLabel("Destinatario:");
-	                JTextField receiverTextField = new JTextField();
-	                JLabel scheduleLabel = new JLabel("Horario");
-	                JTextField scheduleTextField = new JTextField();
-	                JLabel stateLabel = new JLabel("Estado:");
-	                JTextField stateTextField = new JTextField();
-	                stateTextField.setText(this.sent_states[0]);
-	                scheduleTextField.setText("Sin seleccionar");
-	                receiverTextField.setText("Sin Seleccionar");
-	                
-	                receiverTextField.setEnabled(false);
-	                scheduleTextField.setEnabled(false);
-	                stateTextField.setEnabled(false);
-	                
-	                JButton scheduledButton = new JButton("Programar horario");
-	                scheduledButton.setBackground(Color.DARK_GRAY);
-	                scheduledButton.setForeground(Color.LIGHT_GRAY);
-	                
-	                JButton receiverButton = new JButton("Agregar destinatario");
-	                receiverButton.setBackground(Color.DARK_GRAY);
-	                receiverButton.setForeground(Color.LIGHT_GRAY);
-	                
-	                scheduledPanel.add(scheduledButton);
-	                scheduledPanel.add(receiverButton);
-	                scheduledPanel.add(receiverLabel);
-	                scheduledPanel.add(receiverTextField);
-	                scheduledPanel.add(scheduleLabel);
-	                scheduledPanel.add(scheduleTextField);
-	                scheduledPanel.add(stateLabel);
-	                scheduledPanel.add(stateTextField);
-	                
-	                // General render
-	                JPanel mainPanel = new JPanel();
-	                mainPanel.add(filePanel);
-	                mainPanel.setBackground(Color.WHITE);
-	                mainPanel.add(scheduledPanel);
-	                
-	                JFrame guiFrame = new JFrame("Gestor de archivos planos DIAN");
-	                guiFrame.add(mainPanel);
-	                guiFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-	                guiFrame.setBackground(Color.WHITE);
-	                
-	                guiFrame.setBounds(50, 50, 600, 400);
-	                guiFrame.setVisible(true);
-	            }
-	        };
-	        SwingUtilities.invokeLater(app);
-	  }
-	private class ButtonsListener implements ActionListener{
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			if (e.getSource() == openButton) {
-				final JFileChooser fc = new JFileChooser();
-				 int returnVal = fc.showOpenDialog(fc);
-
-			        if (returnVal == JFileChooser.APPROVE_OPTION) {
-			            File file = fc.getSelectedFile();
-			            uploadedFileLabel.setText(file.getPath());
-			        }
-			}
-			
+	        if (returnVal == JFileChooser.APPROVE_OPTION) {
+	            File file = fc.getSelectedFile();
+	            uploadedFileLabel.setText(file.getPath());
+	            uploadedFileLabel.setDisabledTextColor(Color.BLACK);
+	        }
+		} else if(event.getSource() == receiverButton) {
+			receiverTextField.setEnabled(true);
+			receiverTextField.setText("");
+		} else if(event.getSource() == sendButton) {
+			stateTextField.setText(sentStates[2]);
+			stateTextField.setDisabledTextColor(Color.ORANGE);
 		}
+		
 	}
 }
 

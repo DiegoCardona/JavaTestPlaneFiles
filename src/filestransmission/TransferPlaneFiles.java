@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class TransferPlaneFiles extends JPanel {
+public class TransferPlaneFiles extends JPanel implements ActionListener{
 	
 	public JButton saveButton;
 	private JTextField uploadedFileLabel;
@@ -23,14 +23,7 @@ public class TransferPlaneFiles extends JPanel {
 	private JTextField receiverTextField;
 	private JLabel receiverLabel;
 	private JLabel stateLabel;
-	
-	public ButtonsListener eventListener;
 	private String[] sentStates = {"Sin programar","Pendiente de env�o", "Enviando", "Enviado"};
-	
-	public TransferPlaneFiles() {
-		eventListener = new ButtonsListener();
-		this.setVisible(false);
-	}
 	
 	public void create() {
         JPanel filePanel = createInternalPanel();
@@ -49,6 +42,7 @@ public class TransferPlaneFiles extends JPanel {
         filePanel.add(stateTextField);
         
         // General render
+        this.setVisible(false);
         this.add(filePanel);
         this.setBackground(Color.WHITE);
         this.setBounds(50, 50, 500, 300);
@@ -67,19 +61,19 @@ public class TransferPlaneFiles extends JPanel {
         saveButton.setBackground(Color.DARK_GRAY);
         saveButton.setForeground(Color.LIGHT_GRAY);
         saveButton.setFocusable(false);
-        saveButton.addActionListener(eventListener);
+        saveButton.addActionListener(this);
         
         sendButton = new JButton("Enviar");
         sendButton.setBackground(Color.DARK_GRAY);
         sendButton.setForeground(Color.LIGHT_GRAY);
         sendButton.setFocusable(false);
-        sendButton.addActionListener(eventListener);
+        sendButton.addActionListener(this);
         
         receiverButton = new JButton("Agregar destinatario");
         receiverButton.setBackground(Color.DARK_GRAY);
         receiverButton.setForeground(Color.LIGHT_GRAY);
         receiverButton.setFocusable(false);
-        receiverButton.addActionListener(eventListener);
+        receiverButton.addActionListener(this);
 	}
 	
 	private void configureLabels() {
@@ -98,26 +92,23 @@ public class TransferPlaneFiles extends JPanel {
         stateTextField.setEnabled(false);
 	}
 	
-	private class ButtonsListener implements ActionListener{
+	public void actionPerformed(ActionEvent event) {
+		if (event.getSource() == saveButton) {
+			final JFileChooser fc = new JFileChooser();
+			int returnVal = fc.showOpenDialog(fc);
 
-		public void actionPerformed(ActionEvent event) {
-			if (event.getSource() == saveButton) {
-				final JFileChooser fc = new JFileChooser();
-				int returnVal = fc.showOpenDialog(fc);
-
-		        if (returnVal == JFileChooser.APPROVE_OPTION) {
-		            File file = fc.getSelectedFile();
-		            uploadedFileLabel.setText(file.getPath());
-		            uploadedFileLabel.setDisabledTextColor(Color.BLACK);
-		        }
-			} else if(event.getSource() == receiverButton) {
-				receiverTextField.setEnabled(true);
-				receiverTextField.setText("");
-			} else if(event.getSource() == sendButton) {
-				stateTextField.setText(sentStates[2]);
-				stateTextField.setDisabledTextColor(Color.ORANGE);
-			}
-			
+	        if (returnVal == JFileChooser.APPROVE_OPTION) {
+	            File file = fc.getSelectedFile();
+	            uploadedFileLabel.setText(file.getPath());
+	            uploadedFileLabel.setDisabledTextColor(Color.BLACK);
+	        }
+		} else if(event.getSource() == receiverButton) {
+			receiverTextField.setEnabled(true);
+			receiverTextField.setText("");
+		} else if(event.getSource() == sendButton) {
+			stateTextField.setText(sentStates[2]);
+			stateTextField.setDisabledTextColor(Color.ORANGE);
 		}
+		
 	}
 }
