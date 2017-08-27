@@ -9,7 +9,6 @@ import java.io.File;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -30,6 +29,7 @@ public class TransferPlaneFiles extends JPanel {
 	
 	public TransferPlaneFiles() {
 		eventListener = new ButtonsListener();
+		this.setVisible(false);
 	}
 	
 	public void create() {
