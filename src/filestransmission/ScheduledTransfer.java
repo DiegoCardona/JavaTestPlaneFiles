@@ -29,7 +29,7 @@ public class ScheduledTransfer extends JFrame{
 		
 		Runnable app = new Runnable() {
 	            
-	            private String[] sent_states = {"Sin programar","Pendiente de envÃ­o", "Enviando", "Enviado"};
+	            private String[] sent_states = {"Sin programar","Pendiente de envío", "Enviando", "Enviado"};
 
 				public void run() {
 					// upload files section
@@ -56,7 +56,7 @@ public class ScheduledTransfer extends JFrame{
 	                
 	                // Set schedule section
 	                JPanel scheduledPanel = new JPanel(new GridLayout(0,2,5,10));
-	                scheduledPanel.setBorder(BorderFactory.createTitledBorder("Programar envÃ­o"));
+	                scheduledPanel.setBorder(BorderFactory.createTitledBorder("Programar envío"));
 	                scheduledPanel.setBackground(Color.WHITE);
 	                
 	                JLabel receiverLabel = new JLabel("Destinatario:");
