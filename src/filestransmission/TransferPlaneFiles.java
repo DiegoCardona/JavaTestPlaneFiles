@@ -13,9 +13,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 
-public class TransferPlaneFiles{
+public class TransferPlaneFiles extends JFrame {
 	
 	public JButton saveButton;
 	private JTextField uploadedFileLabel;
@@ -23,76 +22,93 @@ public class TransferPlaneFiles{
 	private JButton sendButton;
 	private JTextField stateTextField;
 	private JTextField receiverTextField;
-	private String[] sentStates = {"Sin programar","Pendiente de envío", "Enviando", "Enviado"};
+	private JLabel receiverLabel;
+	private JLabel stateLabel;
 	
-	public void run() { 
-		Runnable app = new Runnable() {
-
-				public void run() {
-				
-	                JPanel filePanel = new JPanel(new GridLayout(0,2,80,10));
-	                filePanel.setBorder(BorderFactory.createTitledBorder("Envíar Plano"));
-	                filePanel.setBackground(Color.WHITE);
-	                ButtonsListener eventListener = new ButtonsListener();
-
-	                saveButton = new JButton("Seleccionar plano");
-	                saveButton.setBackground(Color.DARK_GRAY);
-	                saveButton.setForeground(Color.LIGHT_GRAY);
-	                saveButton.setFocusable(false);
-	                saveButton.addActionListener(eventListener);
-	                
-	                uploadedFileLabel = new JTextField(":/__seleccione_archivo__");
-	                uploadedFileLabel.setEnabled(false);
-	                
-	                filePanel.add(saveButton);
-	                filePanel.add(uploadedFileLabel);
-	                
-	                JLabel receiverLabel = new JLabel("Destinatario:");
-	                receiverTextField = new JTextField();
-	                JLabel stateLabel = new JLabel("Estado:");
-	                stateTextField = new JTextField();
-	                stateTextField.setText(sentStates[1]);
-	                receiverTextField.setText("Ingresar IP");
-	                
-	                receiverTextField.setEnabled(false);
-	                stateTextField.setEnabled(false);
-	                
-	                sendButton = new JButton("Enviar");
-	                sendButton.setBackground(Color.DARK_GRAY);
-	                sendButton.setForeground(Color.LIGHT_GRAY);
-	                sendButton.setFocusable(false);
-	                sendButton.addActionListener(eventListener);
-	                
-	                receiverButton = new JButton("Agregar destinatario");
-	                receiverButton.setBackground(Color.DARK_GRAY);
-	                receiverButton.setForeground(Color.LIGHT_GRAY);
-	                receiverButton.setFocusable(false);
-	                receiverButton.addActionListener(eventListener);
-	                
-	                filePanel.add(receiverButton);
-	                filePanel.add(sendButton);
-	                filePanel.add(receiverLabel);
-	                filePanel.add(receiverTextField);
-	                filePanel.add(stateLabel);
-	                filePanel.add(stateTextField);
-	                
-	                // General render
-	                JPanel mainPanel = new JPanel();
-	                mainPanel.add(filePanel);
-	                mainPanel.setBackground(Color.WHITE);
-	                mainPanel.setBounds(50, 50, 500, 300);
-	                
-	                JFrame guiFrame = new JFrame("Gestor de archivos planos DIAN");
-	                guiFrame.add(mainPanel);
-	                guiFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-	                guiFrame.setBackground(Color.WHITE);
-	                
-	                guiFrame.setBounds(50, 50, 600, 400);
-	                guiFrame.setVisible(true);
-	            }
-	        };
-	        SwingUtilities.invokeLater(app);
-	  }
+	public ButtonsListener eventListener;
+	private String[] sentStates = {"Sin programar","Pendiente de envï¿½o", "Enviando", "Enviado"};
+	
+	public TransferPlaneFiles() {
+		super("Gestor de archivos planos DIAN");
+		eventListener = new ButtonsListener();
+	}
+	
+	public void run() {
+        JPanel filePanel = createInternalPanel();
+        
+        configureButtons();
+        configureLabels();
+        configureTextFields();
+        
+        
+        filePanel.add(saveButton);
+        filePanel.add(uploadedFileLabel);
+        filePanel.add(receiverButton);
+        filePanel.add(sendButton);
+        filePanel.add(receiverLabel);
+        filePanel.add(receiverTextField);
+        filePanel.add(stateLabel);
+        filePanel.add(stateTextField);
+        
+        // General render
+        JPanel mainPanel = new JPanel();
+        mainPanel.add(filePanel);
+        mainPanel.setBackground(Color.WHITE);
+        mainPanel.setBounds(50, 50, 500, 300);
+        configureView(mainPanel);
+	}
+	
+	private JPanel createInternalPanel() {
+		JPanel filePanel = new JPanel(new GridLayout(0,2,80,10));
+        filePanel.setBorder(BorderFactory.createTitledBorder("Envï¿½ar Plano"));
+        filePanel.setBackground(Color.WHITE);
+        
+        return filePanel;
+	}
+	
+	private void configureButtons() {
+		saveButton = new JButton("Seleccionar plano");
+        saveButton.setBackground(Color.DARK_GRAY);
+        saveButton.setForeground(Color.LIGHT_GRAY);
+        saveButton.setFocusable(false);
+        saveButton.addActionListener(eventListener);
+        
+        sendButton = new JButton("Enviar");
+        sendButton.setBackground(Color.DARK_GRAY);
+        sendButton.setForeground(Color.LIGHT_GRAY);
+        sendButton.setFocusable(false);
+        sendButton.addActionListener(eventListener);
+        
+        receiverButton = new JButton("Agregar destinatario");
+        receiverButton.setBackground(Color.DARK_GRAY);
+        receiverButton.setForeground(Color.LIGHT_GRAY);
+        receiverButton.setFocusable(false);
+        receiverButton.addActionListener(eventListener);
+	}
+	
+	private void configureLabels() {
+		uploadedFileLabel = new JTextField(":/__seleccione_archivo__");
+        uploadedFileLabel.setEnabled(false);
+        receiverLabel = new JLabel("Destinatario:");
+        stateLabel = new JLabel("Estado:");
+	}
+	
+	private void configureTextFields() {
+		receiverTextField = new JTextField();
+        stateTextField = new JTextField();
+        stateTextField.setText(sentStates[1]);
+        receiverTextField.setText("Ingresar IP");
+        receiverTextField.setEnabled(false);
+        stateTextField.setEnabled(false);
+	}
+	
+	private void configureView(JPanel mainPanel) {
+		this.add(mainPanel);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setBackground(Color.WHITE);
+        this.setBounds(50, 50, 600, 400);
+        this.setVisible(true);
+	}
 	
 	private class ButtonsListener implements ActionListener{
 
