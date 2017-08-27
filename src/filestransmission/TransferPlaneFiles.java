@@ -14,7 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class TransferPlaneFiles extends JFrame {
+public class TransferPlaneFiles extends JPanel {
 	
 	public JButton saveButton;
 	private JTextField uploadedFileLabel;
@@ -29,17 +29,15 @@ public class TransferPlaneFiles extends JFrame {
 	private String[] sentStates = {"Sin programar","Pendiente de env�o", "Enviando", "Enviado"};
 	
 	public TransferPlaneFiles() {
-		super("Gestor de archivos planos DIAN");
 		eventListener = new ButtonsListener();
 	}
 	
-	public void run() {
+	public void create() {
         JPanel filePanel = createInternalPanel();
         
         configureButtons();
         configureLabels();
         configureTextFields();
-        
         
         filePanel.add(saveButton);
         filePanel.add(uploadedFileLabel);
@@ -51,11 +49,9 @@ public class TransferPlaneFiles extends JFrame {
         filePanel.add(stateTextField);
         
         // General render
-        JPanel mainPanel = new JPanel();
-        mainPanel.add(filePanel);
-        mainPanel.setBackground(Color.WHITE);
-        mainPanel.setBounds(50, 50, 500, 300);
-        configureView(mainPanel);
+        this.add(filePanel);
+        this.setBackground(Color.WHITE);
+        this.setBounds(50, 50, 500, 300);
 	}
 	
 	private JPanel createInternalPanel() {
@@ -100,14 +96,6 @@ public class TransferPlaneFiles extends JFrame {
         receiverTextField.setText("Ingresar IP");
         receiverTextField.setEnabled(false);
         stateTextField.setEnabled(false);
-	}
-	
-	private void configureView(JPanel mainPanel) {
-		this.add(mainPanel);
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setBackground(Color.WHITE);
-        this.setBounds(50, 50, 600, 400);
-        this.setVisible(true);
 	}
 	
 	private class ButtonsListener implements ActionListener{
